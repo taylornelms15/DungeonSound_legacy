@@ -20,6 +20,10 @@ set(PROJECT_SOURCES
         nonstandard_icons.qrc
         soundsample.h
         soundsample.cpp
+        playlist.h
+        playlist.cpp
+        showfile.h
+        showfile.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

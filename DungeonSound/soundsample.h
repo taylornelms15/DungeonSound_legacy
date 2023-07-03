@@ -4,7 +4,7 @@
 #include <QString>
 
 /**
- * @brief The SoundSample class, for storing records of playable audio
+ * @brief Class for storing records of playable audio
  *
  * The SoundSample should record everything that can be set by a user
  * when designing a playlist, but is not meant to be reflective
