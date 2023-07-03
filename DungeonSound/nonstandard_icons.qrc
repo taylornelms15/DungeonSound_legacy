@@ -9,5 +9,7 @@
         <file>Icons/24x24 gear.png</file>
         <file>Icons/24x24 minus.png</file>
         <file>Icons/24x24 plus.png</file>
+        <file>Icons/16x16 pencil.png</file>
+        <file>Icons/24x24 pencil.png</file>
     </qresource>
 </RCC>
