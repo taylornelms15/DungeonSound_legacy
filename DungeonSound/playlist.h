@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <QString>
 #include <QList>
+
 #include "savable.h"
 #include "soundsample.h"
 
@@ -22,7 +23,10 @@ typedef QList<SoundSample> SoundSample_vec_t;
 class Playlist: public Savable
 {
 public:
+    /// Empty constructor
     Playlist();
+    /// Constructor for when reading from file
+    Playlist(QXmlStreamReader& reader);
 
     /* Accessors */
     inline int getNumSoundSamples(){
@@ -32,19 +36,15 @@ public:
     /* Mutable Members */
     /// Visible name of playlist
     QString name;
+    /// Factor to apply to relative volume for media
+    float volume_factor;
 
     /* Saving */
-    int saveToFile(QXmlStreamWriter& writer) const
-    {
-        return -ENOTSUP;
-    }
+    int saveToFile(QXmlStreamWriter& writer) const override;
 
-    int loadFromFile(QXmlStreamReader& reader)
-    {
-        return -ENOTSUP;
-    }
+    int loadFromFile(QXmlStreamReader& reader) override;
 
-    QString elementName() const {
+    QString elementName() const override{
         return QString("Playlist");
     }
 

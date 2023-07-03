@@ -4,6 +4,31 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+/**
+ * @brief Convenience macro for loading attributes stored under their parameter names
+ * @param READER reference to the QXmlStreamReader
+ * @param NAME name of attribute/parameter
+ * @param TYPE type of parameter; should be uppercase, matching toString, toFloat, etc
+ *
+ * Example usage: LOAD_ATTRIBUTE(reader, resource_url, String)
+ */
+#define LOAD_ATTRIBUTE(READER, NAME, TYPE) \
+{ \
+    if (READER.attributes().hasAttribute("#NAME")) { \
+        NAME = READER.attributes().value("#NAME").to##TYPE(); \
+    } \
+}
+
+#define SAVE_ATTRIBUTE(WRITER, NAME) \
+{ \
+    WRITER.writeAttribute("#NAME", QString(NAME)); \
+}
+
+#define SAVE_ATTRIBUTE_NUMERIC(WRITER, NAME) \
+{ \
+        WRITER.writeAttribute("#NAME", QString::number(NAME)); \
+}
+
 class Savable
 {
 public:

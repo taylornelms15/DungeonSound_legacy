@@ -1,7 +1,10 @@
 #ifndef SOUNDSAMPLE_H
 #define SOUNDSAMPLE_H
 
+#include <errno.h>
 #include <QString>
+
+#include "savable.h"
 
 /**
  * @brief Class for storing records of playable audio
@@ -10,10 +13,13 @@
  * when designing a playlist, but is not meant to be reflective
  * of any current playback status on its own.
  */
-class SoundSample
+class SoundSample: public Savable
 {
 public:
+    /// Empty constructor
     SoundSample();
+    /// Loading constructor
+    SoundSample(QXmlStreamReader& reader);
 
     QString getResourceURL() const{
         return resource_url;
@@ -27,6 +33,16 @@ public:
      */
     void setResourceURL();
 
+    /* Saving */
+    int saveToFile(QXmlStreamWriter& writer) const override;
+
+    int loadFromFile(QXmlStreamReader& reader) override;
+
+    QString elementName() const final
+    {
+        return QString("SoundSample");
+    }
+
     /* Mutable Members */
     /// Visible name of media
     QString name;
@@ -36,6 +52,7 @@ public:
     float end_timestamp;
     /// Factor to apply to relative volume for media
     float volume_factor;
+
 protected:
     /// Path to playable media
     QString resource_url;
