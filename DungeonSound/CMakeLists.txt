@@ -24,6 +24,7 @@ set(PROJECT_SOURCES
         playlist.cpp
         showfile.h
         showfile.cpp
+        savable.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

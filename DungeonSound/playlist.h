@@ -1,8 +1,10 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
 
+#include <errno.h>
 #include <QString>
 #include <QList>
+#include "savable.h"
 #include "soundsample.h"
 
 /**
@@ -17,7 +19,7 @@ typedef QList<SoundSample> SoundSample_vec_t;
  * designing a collection of sounds to later play back.
  * It is not meant to be reflective of any current playback status.
  */
-class Playlist
+class Playlist: public Savable
 {
 public:
     Playlist();
@@ -30,6 +32,21 @@ public:
     /* Mutable Members */
     /// Visible name of playlist
     QString name;
+
+    /* Saving */
+    int saveToFile(QXmlStreamWriter& writer) const
+    {
+        return -ENOTSUP;
+    }
+
+    int loadFromFile(QXmlStreamReader& reader)
+    {
+        return -ENOTSUP;
+    }
+
+    QString elementName() const {
+        return QString("Playlist");
+    }
 
 protected:
     /**
