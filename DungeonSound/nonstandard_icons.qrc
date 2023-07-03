@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/DungeonSound">
+        <file>Icons/16x16 cross.png</file>
+        <file>Icons/16x16 gear.png</file>
+        <file>Icons/16x16 gear--pencil.png</file>
+        <file>Icons/16x16 minus.png</file>
+        <file>Icons/16x16 plus.png</file>
+        <file>Icons/24x24 cross.png</file>
+        <file>Icons/24x24 gear.png</file>
+        <file>Icons/24x24 minus.png</file>
+        <file>Icons/24x24 plus.png</file>
+    </qresource>
+</RCC>
