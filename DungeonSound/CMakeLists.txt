@@ -9,8 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
 
 add_subdirectory(tests)
 
@@ -34,6 +34,7 @@ qt_add_library(DungeonSoundLib
 )
 target_link_libraries(DungeonSoundLib
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
 )
 target_include_directories(DungeonSoundLib
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -66,6 +67,7 @@ include("C:/Users/taylo/AppData/Local/Android/Sdk/android_openssl/android_openss
 
 target_link_libraries(DungeonSound
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
     DungeonSoundLib
 )
 

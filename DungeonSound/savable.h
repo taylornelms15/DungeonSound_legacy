@@ -14,19 +14,19 @@
  */
 #define LOAD_ATTRIBUTE(READER, NAME, TYPE) \
 { \
-    if (READER.attributes().hasAttribute("#NAME")) { \
-        NAME = READER.attributes().value("#NAME").to##TYPE(); \
+    if (READER.attributes().hasAttribute(#NAME)) { \
+        NAME = READER.attributes().value(#NAME).to##TYPE(); \
     } \
 }
 
 #define SAVE_ATTRIBUTE(WRITER, NAME) \
 { \
-    WRITER.writeAttribute("#NAME", QString(NAME)); \
+    WRITER.writeAttribute(#NAME, QString(NAME)); \
 }
 
 #define SAVE_ATTRIBUTE_NUMERIC(WRITER, NAME) \
 { \
-        WRITER.writeAttribute("#NAME", QString::number(NAME)); \
+        WRITER.writeAttribute(#NAME, QString::number(NAME)); \
 }
 
 class Savable

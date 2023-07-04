@@ -39,6 +39,7 @@ add_executable(test_saving
 )
 target_link_libraries(test_saving
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
     GTest::gtest_main
     DungeonSoundLib
 )
