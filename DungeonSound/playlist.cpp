@@ -52,4 +52,5 @@ int Playlist::saveToFile(QXmlStreamWriter& writer) const
         x.saveToFile(writer);
     }
     writer.writeEndElement();
+    return 0;
 }

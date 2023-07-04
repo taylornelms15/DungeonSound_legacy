@@ -12,8 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+add_subdirectory(tests)
+
 set(PROJECT_SOURCES
-        main.cpp
         playbackmainwindow.cpp
         playbackmainwindow.h
         playbackmainwindow.ui
@@ -27,10 +28,21 @@ set(PROJECT_SOURCES
         savable.h
 )
 
+qt_add_library(DungeonSoundLib
+    SHARED
+    ${PROJECT_SOURCES}
+)
+target_link_libraries(DungeonSoundLib
+    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+)
+target_include_directories(DungeonSoundLib
+    INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(DungeonSound
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        main.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET DungeonSound APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -39,20 +51,23 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 else()
     if(ANDROID)
         add_library(DungeonSound SHARED
-            ${PROJECT_SOURCES}
+            main.cpp
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(DungeonSound
-            ${PROJECT_SOURCES}
+            main.cpp
         )
     endif()
 endif()
 
 include("C:/Users/taylo/AppData/Local/Android/Sdk/android_openssl/android_openssl.cmake")
 
-target_link_libraries(DungeonSound PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(DungeonSound
+    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    DungeonSoundLib
+)
 
 set_target_properties(DungeonSound PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
