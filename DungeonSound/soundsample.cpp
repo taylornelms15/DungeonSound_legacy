@@ -31,7 +31,6 @@ void SoundSample::setResourceURL(QString url)
 
 int SoundSample::loadFromFile(QXmlStreamReader& reader)
 {
-    reader.readNext();
     if (!reader.isStartElement() ||
         (reader.name() != elementName()))
     {

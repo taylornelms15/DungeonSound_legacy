@@ -41,6 +41,9 @@ public:
 
     /**
      * @brief Loads this element from a save file
+     *
+     * Notably: want to pass the `reader` when the "Start Element" has already been read
+     *
      * @param reader XML-reading object to be used to read a savable element
      * @return 0 on success, negative value otherwise
      */

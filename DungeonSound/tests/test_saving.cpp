@@ -40,9 +40,34 @@ TEST(TestSavingInit, BasicAssertions) {
     delete ss;
 }
 
+static SoundSample createTestSoundSample(QString resource_url, QString title) {
+
+    SoundSample ss = SoundSample();
+
+    ss.setResourceURL(resource_url);
+    ss.start_timestamp = 0.0;
+    ss.end_timestamp = 114.5;
+    ss.name = title;
+    ss.volume_factor = 0.8;
+
+    return ss;
+}
+
+static Playlist createTestPlaylist(QString title, SoundSample* samples, int num_samples) {
+
+    Playlist pl = Playlist();
+
+    pl.name = title;
+    for(int i = 0; i < num_samples; ++i){
+        pl.appendSoundSample(samples[i]);
+    }
+    pl.volume_factor = 0.9;
+
+    return pl;
+}
+
 TEST(TestSavingSoundSample, BasicAssertions) {
     // Create structures, prep output
-    SoundSample ss = SoundSample();
     QBuffer outbuf;
     outbuf.open(QBuffer::ReadWrite);
     QXmlStreamWriter writer(&outbuf);
@@ -51,11 +76,7 @@ TEST(TestSavingSoundSample, BasicAssertions) {
     // Fill data
     QString resource_url("G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/1-01 Dracula's Theme.mp3");
     QString title("Dracula's Theme");
-    ss.setResourceURL(resource_url);
-    ss.start_timestamp = 0.0;
-    ss.end_timestamp = 114.5;
-    ss.name = title;
-    ss.volume_factor = 0.8;
+    SoundSample ss = createTestSoundSample(resource_url, title);
 
     // Save data
     ss.saveToFile(writer);
@@ -66,6 +87,7 @@ TEST(TestSavingSoundSample, BasicAssertions) {
     QXmlStreamReader reader(&outbuf);
     reader.readNext();
     ASSERT_TRUE(reader.isStartDocument());
+    reader.readNext();
     SoundSample ss_check = SoundSample(reader);
     reader.readNext();
     ASSERT_TRUE(reader.isEndDocument());
@@ -76,10 +98,51 @@ TEST(TestSavingSoundSample, BasicAssertions) {
     ASSERT_EQ(ss.start_timestamp, ss_check.start_timestamp);
     ASSERT_EQ(ss.end_timestamp, ss_check.end_timestamp);
     ASSERT_EQ(ss.volume_factor, ss_check.volume_factor);
-
 }
 
 TEST(TestSavingPlaylist, BasicAssertions) {
-    Playlist pl = Playlist();
+    // Create structures, prep output
+    QBuffer outbuf;
+    outbuf.open(QBuffer::ReadWrite);
+    QXmlStreamWriter writer(&outbuf);
+    startOutputBufferFile(writer);
 
+    // Fill data
+    QString resource_url_1("G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/1-01 Dracula's Theme.mp3");
+    QString resource_url_2("G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/2-12 Carmilla.mp3");
+    QString title_1("Dracula's Theme");
+    QString title_2("Carmilla");
+    SoundSample ss[] = {
+        createTestSoundSample(resource_url_1, title_1),
+        createTestSoundSample(resource_url_2, title_2)
+    };
+
+    QString pl_title("Dungeon Crawl");
+    Playlist pl = createTestPlaylist(pl_title, ss, 2);
+
+    // Save data
+    pl.saveToFile(writer);
+    endOutputBufferFile(writer);
+
+    // Check XML when reading
+    outbuf.seek(0);
+    QXmlStreamReader reader(&outbuf);
+    reader.readNext();
+    ASSERT_TRUE(reader.isStartDocument());
+    reader.readNext();
+    Playlist pl_check = Playlist(reader);
+    reader.readNext();
+    ASSERT_TRUE(reader.isEndDocument());
+
+    // Check data
+    ASSERT_QSTREQ(pl_title, pl_check.name);
+    ASSERT_EQ(pl.volume_factor, pl_check.volume_factor);
+    for (int i = 0; i < 2; ++i) {
+        const SoundSample *ss_check = pl_check.getSoundSample(i);
+        ASSERT_QSTREQ(ss[i].name, ss_check->name);
+        ASSERT_QSTREQ(ss[i].getResourceURL(), ss_check->getResourceURL());
+        ASSERT_EQ(ss[i].start_timestamp, ss_check->start_timestamp);
+        ASSERT_EQ(ss[i].end_timestamp, ss_check->end_timestamp);
+        ASSERT_EQ(ss[i].volume_factor, ss_check->volume_factor);
+    }
 }

@@ -30,14 +30,18 @@ int Playlist::loadFromFile(QXmlStreamReader& reader)
     if (attrs.hasAttribute("title")) {
         name = attrs.value("title").toString();
     }
+    LOAD_ATTRIBUTE(reader, volume_factor, Float)
 
     sampleList = SoundSample_vec_t();
-    while(reader.readNextStartElement()) {
+    while(reader.readNext() && !reader.isEndElement()) {
         if (!reader.name().compare(QString("SoundSample"))) {
             sampleList.push_back(SoundSample(reader));
         }// if this element is a sound sample
     }
-    LOAD_ATTRIBUTE(reader, volume_factor, Float)
+
+    if (!reader.isEndElement()) {
+        qCritical() << "Error reading xml element for Playlist: did not read EndElement\n";
+    }
 
     return 0;
 }
