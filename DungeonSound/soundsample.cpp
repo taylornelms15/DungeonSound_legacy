@@ -27,6 +27,22 @@ void SoundSample::setResourceURL(QString url)
     total_time = 0.0;
 }
 
+bool SoundSample::operator==(const SoundSample& rhs) const
+{
+    if (getResourceURL() != rhs.getResourceURL())
+        return false;
+    if (name != rhs.name)
+        return false;
+    if (start_timestamp != rhs.start_timestamp)
+        return false;
+    if (end_timestamp != rhs.end_timestamp)
+        return false;
+    if (volume_factor != rhs.volume_factor)
+        return false;
+
+    return true;
+}
+
 /* Saving/Loading */
 
 int SoundSample::loadFromFile(QXmlStreamReader& reader)

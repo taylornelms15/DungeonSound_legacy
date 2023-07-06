@@ -93,11 +93,7 @@ TEST(TestSavingSoundSample, BasicAssertions) {
     ASSERT_TRUE(reader.isEndDocument());
 
     // Check data
-    ASSERT_QSTREQ(title, ss_check.name);
-    ASSERT_QSTREQ(resource_url, ss_check.getResourceURL());
-    ASSERT_EQ(ss.start_timestamp, ss_check.start_timestamp);
-    ASSERT_EQ(ss.end_timestamp, ss_check.end_timestamp);
-    ASSERT_EQ(ss.volume_factor, ss_check.volume_factor);
+    ASSERT_EQ(ss, ss_check);
 }
 
 TEST(TestSavingPlaylist, BasicAssertions) {
@@ -138,11 +134,6 @@ TEST(TestSavingPlaylist, BasicAssertions) {
     ASSERT_QSTREQ(pl_title, pl_check.name);
     ASSERT_EQ(pl.volume_factor, pl_check.volume_factor);
     for (int i = 0; i < 2; ++i) {
-        const SoundSample *ss_check = pl_check.getSoundSample(i);
-        ASSERT_QSTREQ(ss[i].name, ss_check->name);
-        ASSERT_QSTREQ(ss[i].getResourceURL(), ss_check->getResourceURL());
-        ASSERT_EQ(ss[i].start_timestamp, ss_check->start_timestamp);
-        ASSERT_EQ(ss[i].end_timestamp, ss_check->end_timestamp);
-        ASSERT_EQ(ss[i].volume_factor, ss_check->volume_factor);
+        ASSERT_EQ(ss[i], *pl_check.getSoundSample(i));
     }
 }

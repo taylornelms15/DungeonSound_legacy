@@ -34,6 +34,8 @@ public:
      */
     void setResourceURL(QString url);
 
+    bool operator==(const SoundSample& rhs) const;
+
     /* Saving */
     int saveToFile(QXmlStreamWriter& writer) const override;
 
