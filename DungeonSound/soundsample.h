@@ -41,9 +41,10 @@ public:
 
     int loadFromFile(QXmlStreamReader& reader) override;
 
+    static inline const QString element_name = QString("SoundSample");
     QString elementName() const final
     {
-        return QString("SoundSample");
+        return element_name;
     }
 
     /* Mutable Members */

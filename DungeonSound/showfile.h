@@ -37,8 +37,34 @@ public:
         }
     }
 
+    void appendBackgroundPlaylist(Playlist& pl){
+        bg_playlists.push_back(pl);
+    }
+
+    /* Accessors */
+    inline int getNumBackgroundPlaylists(){
+        return bg_playlists.length();
+    }
+
+    const Playlist* getBackgroundPlaylist(int index) const {
+        if (index < 0 || index > bg_playlists.length())
+            return nullptr;
+        return &bg_playlists[index];
+    }
+
+    inline QString getFilePath() const {
+        return filepath;
+    }
+
+    /* Saving/Loading */
     int saveShowFile();
     int saveShowFile(const QString path);
+
+    static inline const QString element_name = QString("ShowFile");
+    inline QString elementName(){
+        return element_name;
+    }
+
 
 protected:
     /// "Title" of the Show File
@@ -46,7 +72,12 @@ protected:
     /// Filename that this file was last saved to or loaded from
     QString filepath;
 
+    static inline const QString bg_playlists_element_name = QString("BackgroundPlaylists");
+
     int loadFile(const QString loadPath);
+    int loadFromFile(QXmlStreamReader& reader);
+    int loadBackgroundPlaylists(QXmlStreamReader& reader);
+    void saveToFile(QXmlStreamWriter& writer);
 
     /**
      * @brief List of all playlists meant to be played as background music

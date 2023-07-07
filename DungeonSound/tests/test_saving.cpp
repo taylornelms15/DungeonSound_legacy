@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <QBuffer>
+#include <QFile>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 
@@ -136,4 +137,53 @@ TEST(TestSavingPlaylist, BasicAssertions) {
     for (int i = 0; i < 2; ++i) {
         ASSERT_EQ(ss[i], *pl_check.getSoundSample(i));
     }
+}
+
+static void DebugContents(QString fname)
+{
+    // Debug contents
+    QFile of(fname);
+    of.open(QIODeviceBase::ReadOnly);
+    QTextStream in(&of);
+    while (!in.atEnd()) {
+        qDebug() << in.readLine();
+    }
+    of.close();
+
+}
+
+TEST(TestSavingShowfile, BasicAssertions) {
+    // Create structures
+    QString tempdir = QString().fromStdString(testing::TempDir());
+    QString tempfile(tempdir + "/temp.showfile");
+    ShowFile sf = ShowFile();
+
+    // Fill data
+    QString resource_url_1("G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/1-01 Dracula's Theme.mp3");
+    QString resource_url_2("G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/2-12 Carmilla.mp3");
+    QString title_1("Dracula's Theme");
+    QString title_2("Carmilla");
+
+    SoundSample ss1[] = {
+        createTestSoundSample(resource_url_1, title_1),
+        createTestSoundSample(resource_url_2, title_2)
+    };
+    SoundSample ss2[] = {
+        createTestSoundSample(resource_url_2, title_2),
+    };
+
+    QString pl_title1("Dungeon Crawl");
+    Playlist pl1 = createTestPlaylist(pl_title1, ss1, 2);
+    QString pl_title2("Dungeon Crawl, Encore");
+    Playlist pl2 = createTestPlaylist(pl_title2, ss2, 1);
+
+    sf.appendBackgroundPlaylist(pl1);
+    sf.appendBackgroundPlaylist(pl2);
+
+    // Save data
+    sf.saveShowFile(tempfile);
+
+    ShowFile sf2(tempfile);
+
+
 }

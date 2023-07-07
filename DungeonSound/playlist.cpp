@@ -18,7 +18,7 @@ Playlist::Playlist(QXmlStreamReader& reader)
 int Playlist::loadFromFile(QXmlStreamReader& reader)
 {
     if (!reader.isStartElement() ||
-        (reader.name() != elementName()))
+        (reader.name() != Playlist::element_name))
     {
         qCritical() << "Error reading xml element for Playlist; isStartElement " << (reader.isStartElement() ? "true" : "false");
         qCritical() << "reader.name(): " << reader.name();
@@ -34,7 +34,7 @@ int Playlist::loadFromFile(QXmlStreamReader& reader)
 
     sampleList = SoundSample_vec_t();
     while(reader.readNext() && !reader.isEndElement()) {
-        if (!reader.name().compare(QString("SoundSample"))) {
+        if (!reader.name().compare(SoundSample::element_name)) {
             sampleList.push_back(SoundSample(reader));
         }// if this element is a sound sample
     }

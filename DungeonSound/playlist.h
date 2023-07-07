@@ -54,8 +54,9 @@ public:
 
     int loadFromFile(QXmlStreamReader& reader) override;
 
+    static inline const QString element_name = QString("Playlist");
     QString elementName() const override{
-        return QString("Playlist");
+        return element_name;
     }
 
 protected:

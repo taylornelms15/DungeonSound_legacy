@@ -82,7 +82,7 @@ bool SoundSample::operator==(const SoundSample& rhs) const
 int SoundSample::loadFromFile(QXmlStreamReader& reader)
 {
     if (!reader.isStartElement() ||
-        (reader.name() != elementName()))
+        (reader.name() != SoundSample::element_name))
     {
         qCritical() << "Error reading xml element for SoundSample; isStartElement " << (reader.isStartElement() ? "true" : "false");
         qCritical() << "reader.name(): " << reader.name();
