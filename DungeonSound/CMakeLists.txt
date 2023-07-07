@@ -9,10 +9,78 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# qt
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
 
+# ffmpeg
+set(FFMPEG_ROOT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../ffmpeg-6.0)
+if (NOT EXISTS ${FFMPEG_ROOT_DIRECTORY} OR NOT IS_DIRECTORY ${FFMPEG_ROOT_DIRECTORY})
+    message(FATAL_ERROR "Could not find ${FFMPEG_ROOT_DIRECTORY}")
+endif()
+
+find_path(AVFORMAT_INCLUDE_DIR REQUIRED
+    NAMES "avformat.h"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}
+    PATH_SUFFIXES "libavformat"
+)
+find_path(AVCODEC_INCLUDE_DIR REQUIRED
+    NAMES "avcodec.h"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}
+    PATH_SUFFIXES "libavcodec"
+)
+find_path(AVUTIL_INCLUDE_DIR REQUIRED
+    NAMES "avutil.h"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}/libavutil
+    PATH_SUFFIXES "libavutil"
+)
+find_path(AVDEVICE_INCLUDE_DIR REQUIRED
+    NAMES "avdevice.h"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}
+    PATH_SUFFIXES "libavdevice"
+)
+find_library(AVFORMAT_LIBRARY REQUIRED
+    NAMES "avformat"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}/libavformat
+    NO_DEFAULT_PATH
+)
+find_library(AVCODEC_LIBRARY REQUIRED
+    NAMES "avcodec"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}
+    PATH_SUFFIXES "libavcodec"
+)
+find_library(AVUTIL_LIBRARY REQUIRED
+    NAMES "avutil"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}
+    PATH_SUFFIXES "libavutil"
+)
+find_library(AVDEVICE_LIBRARY REQUIRED
+    NAMES "avdevice"
+    HINTS ${FFMPEG_ROOT_DIRECTORY}
+    PATH_SUFFIXES "libavdevice"
+)
+
+# id3v2lib
+
+set(id3v2lib_DIR
+    "C:/Program Files (x86)/id3v2lib"
+)
+set(id3v2lib_library_file
+    ${id3v2lib_DIR}/lib/libid3v2lib.a
+)
+set(id3v2lib_inc_DIR
+    ${id3v2lib_DIR}/include/id3v2lib-2.0
+)
+add_library(id3v2lib STATIC IMPORTED)
+set_target_properties(id3v2lib PROPERTIES
+    IMPORTED_LOCATION ${id3v2lib_library_file}
+    INTERFACE_INCLUDE_DIRECTORIES ${id3v2lib_inc_DIR}
+)
+
+# testing subdirectory
 add_subdirectory(tests)
+
+# project library
 
 set(PROJECT_SOURCES
         playbackmainwindow.cpp
@@ -35,10 +103,13 @@ qt_add_library(DungeonSoundLib
 target_link_libraries(DungeonSoundLib
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
+    id3v2lib
 )
 target_include_directories(DungeonSoundLib
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+# Project binary
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(DungeonSound

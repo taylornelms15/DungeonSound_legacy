@@ -1,8 +1,16 @@
 #include "soundsample.h"
 
 #include <QDebug>
-#include <QtMultimedia/QMediaPlayer>
+#include <QFileInfo>
+#include <QElapsedTimer>
+#include <QtMultimedia/QAudioDecoder>
 #include <QtMultimedia/QMediaMetaData>
+#include <id3v2lib.h>
+#ifdef HAVE_FFMPEG
+extern "C" {
+#include <libavformat/avformat.h>
+}
+#endif
 
 SoundSample::SoundSample()
 {
@@ -19,8 +27,34 @@ void SoundSample::setResourceURL(QString url)
     resource_url = url;
     rurl = QUrl::fromLocalFile(resource_url);
 
-    QMediaPlayer mreader = QMediaPlayer();
-    mreader.setSource(rurl);
+    QElapsedTimer timer;
+    timer.start();
+    ID3v2_Tag *tag = ID3v2_read_tag(url.toStdString().c_str());
+    if (tag == NULL)
+        qCritical() << "Error reading tag from string <" << url << ">";
+    else
+        qDebug() << "Read tag! Elapsed: " << timer.elapsed() << "ms";
+
+#ifdef HAVE_FFMPEG
+    AVFormatContext* pFormatCtx = avformat_alloc_context();
+    avformat_open_input(&pFormatCtx, url.toStdString(), NULL, NULL);
+    int64_t duration = pFormatCtx->duration;
+    // etc
+    avformat_close_input(&pFormatCtx);
+    avformat_free_context(pFormatCtx);
+#endif
+/*
+    QAudioDecoder decoder = QAudioDecoder();
+    decoder.setSource(rurl);
+    QFileInfo finfo(url);
+    QAudioBuffer fbuf = decoder.read();
+    qDebug() << QFileInfo(url);
+    qDebug() << decoder.isSupported();
+    qDebug() << decoder.audioFormat();
+    qDebug() << decoder.isDecoding();
+    qDebug() << decoder.source();
+    qDebug() << decoder.read().format();
+    */
     // TODO: figure out how to load this data synchronously
     //int duration_ms = mreader.duration();
     //total_time = duration_ms / 1000.0;
