@@ -28,9 +28,19 @@ public:
     /// Constructor for when reading from file
     Playlist(QXmlStreamReader& reader);
 
+    void appendSoundSample(SoundSample& ss){
+        sampleList.push_back(ss);
+    }
+
     /* Accessors */
     inline int getNumSoundSamples(){
         return sampleList.length();
+    }
+
+    const SoundSample* getSoundSample(int index) const {
+        if (index < 0 || index > sampleList.length())
+            return nullptr;
+        return &sampleList[index];
     }
 
     /* Mutable Members */

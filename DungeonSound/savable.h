@@ -14,19 +14,19 @@
  */
 #define LOAD_ATTRIBUTE(READER, NAME, TYPE) \
 { \
-    if (READER.attributes().hasAttribute("#NAME")) { \
-        NAME = READER.attributes().value("#NAME").to##TYPE(); \
+    if (READER.attributes().hasAttribute(#NAME)) { \
+        NAME = READER.attributes().value(#NAME).to##TYPE(); \
     } \
 }
 
 #define SAVE_ATTRIBUTE(WRITER, NAME) \
 { \
-    WRITER.writeAttribute("#NAME", QString(NAME)); \
+    WRITER.writeAttribute(#NAME, QString(NAME)); \
 }
 
 #define SAVE_ATTRIBUTE_NUMERIC(WRITER, NAME) \
 { \
-        WRITER.writeAttribute("#NAME", QString::number(NAME)); \
+        WRITER.writeAttribute(#NAME, QString::number(NAME)); \
 }
 
 class Savable
@@ -41,6 +41,9 @@ public:
 
     /**
      * @brief Loads this element from a save file
+     *
+     * Notably: want to pass the `reader` when the "Start Element" has already been read
+     *
      * @param reader XML-reading object to be used to read a savable element
      * @return 0 on success, negative value otherwise
      */

@@ -3,6 +3,7 @@
 
 #include <errno.h>
 #include <QString>
+#include <QUrl>
 
 #include "savable.h"
 
@@ -31,7 +32,9 @@ public:
      * It not only sets the relevant string, but also does a number of checks and
      * mutations internally to handle any issues in the
      */
-    void setResourceURL();
+    void setResourceURL(QString url);
+
+    bool operator==(const SoundSample& rhs) const;
 
     /* Saving */
     int saveToFile(QXmlStreamWriter& writer) const override;
@@ -56,6 +59,8 @@ public:
 protected:
     /// Path to playable media
     QString resource_url;
+    /// A copy of the above
+    QUrl rurl;
     /// Total runtime of loaded media, in seconds
     float total_time;
     /// Playable runtime of loaded media, in seconds
