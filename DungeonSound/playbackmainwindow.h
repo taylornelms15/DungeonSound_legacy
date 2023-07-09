@@ -27,6 +27,7 @@ public slots:
 protected:
     int setupIconBar();
     int setupBackgroundPlaylistsWidget();
+    int updateBackgroundPlaylistsWidget();
 
     NavigationState& navstate;
 

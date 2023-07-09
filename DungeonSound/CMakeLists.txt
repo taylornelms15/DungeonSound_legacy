@@ -13,6 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
 
+# flowlayout subdir
+add_subdirectory(flowlayout)
+
 #[[
 # ffmpeg
 set(FFMPEG_ROOT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../ffmpeg-6.0)
@@ -109,6 +112,7 @@ target_link_libraries(DungeonSoundLib
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
     id3v2lib
+    flowlayout_lib
 )
 target_include_directories(DungeonSoundLib
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -145,6 +149,7 @@ target_link_libraries(DungeonSound
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
     DungeonSoundLib
+    flowlayout_lib
 )
 
 set_target_properties(DungeonSound PROPERTIES

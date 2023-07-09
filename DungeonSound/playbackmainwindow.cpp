@@ -3,6 +3,7 @@
 
 #include <QFile>
 
+#include "flowlayout/flowlayout.h"
 #include "navigationstate.h"
 
 /* Playlist Button */
@@ -90,9 +91,8 @@ int PlaybackMainWindow::setupIconBar()
     return 0;
 }
 
-int PlaybackMainWindow::setupBackgroundPlaylistsWidget()
+int PlaybackMainWindow::updateBackgroundPlaylistsWidget()
 {
-    // Grab the extant items
     QWidget *container = ui->backgroundPlaylistsCollection;
     QFrame *addPlaylistFrame = ui->AddPlaylistFrame;
     // Remove the "add" frame, keep it around
@@ -112,7 +112,23 @@ int PlaybackMainWindow::setupBackgroundPlaylistsWidget()
     }
     container->layout()->addItem(addLayoutItem);
     return 0;
+}
 
+int PlaybackMainWindow::setupBackgroundPlaylistsWidget()
+{
+    // Grab the extant items
+    QWidget *container = ui->backgroundPlaylistsCollection;
+    QFrame *addPlaylistFrame = ui->AddPlaylistFrame;
+    // Remove the "add" frame, keep it around
+    QLayoutItem *addLayoutItem = container->layout()->takeAt(container->layout()->indexOf(addPlaylistFrame));
+
+    // Change the layout to the flow layout
+    FlowLayout *flayout = new FlowLayout(container);
+    delete container->layout();
+    container->setLayout(flayout);
+    flayout->addItem(addLayoutItem);
+
+    return updateBackgroundPlaylistsWidget();
 }
 
 /* Constructor/Destructor */
