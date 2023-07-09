@@ -215,7 +215,7 @@ int PlaybackMainWindow::executeLoadShowFile()
 
 void PlaybackMainWindow::saveShowFileButton()
 {
-    qDebug("Button Press: Save Show File");
+    qDebug("<Button Press> Save Show File");
     int rv = executeSaveShowFile();
     if (rv)
         qWarning() << "<Saving> Error on save: " << rv;
@@ -223,7 +223,7 @@ void PlaybackMainWindow::saveShowFileButton()
 
 void PlaybackMainWindow::openShowFileButton()
 {
-    qDebug("Button Press: Open Show File");
+    qDebug("<Button Press> Open Show File");
     int rv = executeLoadShowFile();
     if (rv)
         qWarning() << "<Loading> Error on load: " << rv;
@@ -231,19 +231,18 @@ void PlaybackMainWindow::openShowFileButton()
 
 void PlaybackMainWindow::newShowFileButton()
 {
-    qDebug("Button Press: New Show File");
+    qDebug("<Button Press> New Show File");
     int rv = executeNewShowFile();
     if (rv)
         qWarning() << "<Loading> Error on new: " << rv;
-
 }
 
 void PlaybackMainWindow::settingsShowFileButton()
 {
-    qDebug("Button Press: Settings Show File");
+    qDebug("<Button Press> Settings Show File");
 }
 
 void PlaybackMainWindow::addBackgroundPlaylistButton()
 {
-    qDebug("Button Press: Add Background Music Playlist");
+    qDebug("<Button Press> Add Background Music Playlist");
 }

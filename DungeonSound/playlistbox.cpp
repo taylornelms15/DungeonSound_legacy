@@ -74,20 +74,20 @@ PlaylistBox::PlaylistBox(QWidget *parent, const Playlist *pl)
 
 void PlaylistBox::editButtonPressed()
 {
-    qDebug() << "edit button pressed for playlist " << playlist->name;
+    qDebug() << "<Button Press> edit button for playlist " << playlist->name;
 }
 
 void PlaylistBox::playButtonPressed()
 {
-    qDebug() << "play button pressed for playlist " << playlist->name;
+    qDebug() << "<Button Press> play button for playlist " << playlist->name;
 }
 
 void PlaylistBox::pauseButtonPressed()
 {
-    qDebug() << "pause button pressed for playlist " << playlist->name;
+    qDebug() << "<Button Press> pause button for playlist " << playlist->name;
 }
 
 void PlaylistBox::stopButtonPressed()
 {
-    qDebug() << "stop button pressed for playlist " << playlist->name;
+    qDebug() << "<Button Press> stop button for playlist " << playlist->name;
 }
