@@ -96,6 +96,9 @@ set(PROJECT_SOURCES
         showfile.h
         showfile.cpp
         savable.h
+        development_headers.h
+        navigationstate.h
+        navigationstate.cpp
 )
 
 qt_add_library(DungeonSoundLib
