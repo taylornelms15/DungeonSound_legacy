@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QStyle>
 
+#include "navigationstate.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class PlaybackMainWindow; }
 QT_END_NAMESPACE
@@ -24,6 +26,9 @@ public slots:
 
 protected:
     int setupIconBar();
+    int setupBackgroundPlaylistsWidget();
+
+    NavigationState& navstate;
 
 
 private:

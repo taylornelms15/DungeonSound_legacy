@@ -10,4 +10,12 @@
 
 #define USING_SAMPLE_SHOWFILE
 
+#ifdef USING_SAMPLE_SHOWFILE
+static char resource_url_1[] = "G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/1-01 Dracula's Theme.mp3";
+static char resource_url_2[] = "G:/My Drive/Dungeons and Dragons/Castlevania Campaign I Guess/CastlevaniaMusic/DungeonCrawl/2-12 Carmilla.mp3";
+static char title_1[] = "Dracula's Theme";
+static char title_2[] = "Carmilla";
+static char sample_saveloc[] = "G:/My Drive/DungeonSound/sample.showfile";
+#endif
+
 #endif // DEVELOPMENT_HEADERS_H

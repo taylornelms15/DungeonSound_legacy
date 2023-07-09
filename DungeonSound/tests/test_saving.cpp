@@ -8,6 +8,8 @@
 #include "playlist.h"
 #include "showfile.h"
 
+#include "development_headers.h"
+
 /* Helpers */
 
 #define ASSERT_QSTREQ(EXPECT, ACTUAL) \
@@ -181,9 +183,13 @@ TEST(TestSavingShowfile, BasicAssertions) {
     sf.appendBackgroundPlaylist(pl2);
 
     // Save data
+#ifdef USING_SAMPLE_SHOWFILE
+    sf.saveShowFile(sample_saveloc);
+#endif
     sf.saveShowFile(tempfile);
 
     ShowFile sf2(tempfile);
-
+    // TODO: compare the two ShowFiles
+    // TODO: delete tempfile
 
 }
