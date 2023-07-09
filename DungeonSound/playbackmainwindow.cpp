@@ -30,7 +30,7 @@ static QFrame *createPlaylistBox(const Playlist *pl, QWidget *parent)
     // Put stuff in the box
     // Settings button
     QPushButton *setbut = new QPushButton(rv);
-    setbut->setIcon(QIcon(":/DungeonSound/Icons/24x24 gear.png"));
+    setbut->setIcon(QIcon(":/DungeonSound/Icons/24x24 pencil.png"));
     glayout->addWidget(setbut, 0, 0, Qt::AlignRight);
     glayout->setRowStretch(0, 1);
     QLabel *plNameLabel = new QLabel(rv);
