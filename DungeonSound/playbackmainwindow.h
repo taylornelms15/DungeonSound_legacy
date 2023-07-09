@@ -29,6 +29,7 @@ protected:
     int setupIconBar();
     int setupBackgroundPlaylistsWidget();
     int updateBackgroundPlaylistsWidget();
+    void clearBackgroundPlaylistsWidget();
 
     NavigationState& navstate;
 

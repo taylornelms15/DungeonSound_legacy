@@ -2,6 +2,7 @@
 #include "./ui_playbackmainwindow.h"
 
 #include <QFile>
+#include <QtAlgorithms>
 
 #include "flowlayout/flowlayout.h"
 #include "playlistbox.h"
@@ -52,12 +53,22 @@ int PlaybackMainWindow::setupIconBar()
     return 0;
 }
 
+void PlaybackMainWindow::clearBackgroundPlaylistsWidget()
+{
+    QWidget *container = ui->backgroundPlaylistsCollection;
+    container->setUpdatesEnabled(false);
+    qDeleteAll(container->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+    container->setUpdatesEnabled(true);
+}
+
 int PlaybackMainWindow::updateBackgroundPlaylistsWidget()
 {
     QWidget *container = ui->backgroundPlaylistsCollection;
     QFrame *addPlaylistFrame = ui->AddPlaylistFrame;
     // Remove the "add" frame, keep it around
     QLayoutItem *addLayoutItem = container->layout()->takeAt(container->layout()->indexOf(addPlaylistFrame));
+
+    clearBackgroundPlaylistsWidget();
 
     // Look at our show logic
     ShowFile *sf = navstate.showfile;
