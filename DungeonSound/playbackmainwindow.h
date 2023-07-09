@@ -23,6 +23,7 @@ public slots:
     void openShowFileButton();
     void newShowFileButton();
     void settingsShowFileButton();
+    void addBackgroundPlaylistButton();
 
 protected:
     int setupIconBar();

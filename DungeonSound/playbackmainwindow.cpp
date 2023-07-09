@@ -7,46 +7,6 @@
 #include "playlistbox.h"
 #include "navigationstate.h"
 
-/* Playlist Button */
-
-static QFrame *createPlaylistBox(const Playlist *pl, QWidget *parent)
-{
-    QFrame *rv = new QFrame(parent);
-
-    // Create the box
-    QSizePolicy sp;
-    sp.setHorizontalPolicy(QSizePolicy::Fixed);
-    sp.setVerticalPolicy(QSizePolicy::Fixed);
-    sp.setHorizontalStretch(0);
-    sp.setVerticalStretch(0);
-    rv->setSizePolicy(sp);
-    rv->setMinimumSize(QSize(256, 128));
-    rv->setMaximumSize(QSize(256, 128));
-    rv->setFrameShape(QFrame::Panel);
-    rv->setFrameShadow(QFrame::Raised);
-    rv->setLineWidth(1);
-    QGridLayout *glayout = new QGridLayout(rv);
-    rv->setLayout(glayout);
-
-    // Put stuff in the box
-    // Settings button
-    QPushButton *setbut = new QPushButton(rv);
-    setbut->setIcon(QIcon(":/DungeonSound/Icons/24x24 pencil.png"));
-    glayout->addWidget(setbut, 0, 0, Qt::AlignRight);
-    glayout->setRowStretch(0, 1);
-    QLabel *plNameLabel = new QLabel(rv);
-    plNameLabel->setText(pl->name);
-    plNameLabel->setAlignment(Qt::AlignCenter);
-    glayout->addWidget(plNameLabel, 1, 0, Qt::AlignCenter);
-    glayout->setRowStretch(1, 1);
-    QSpacerItem *spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    glayout->addItem(spacer, 2, 0, Qt::AlignCenter);
-    glayout->setRowStretch(2, 1);
-
-
-    return rv;
-}
-
 /* UI Set-Up */
 
 void PlaybackMainWindow::setActionIconStyle(QAction *action, QString iconstring)
@@ -117,6 +77,9 @@ int PlaybackMainWindow::updateBackgroundPlaylistsWidget()
 
 int PlaybackMainWindow::setupBackgroundPlaylistsWidget()
 {
+    // Connect the add button to the callback for this window
+    connect(ui->addBackgroundMusicPlaylistButton, &QAbstractButton::pressed, this, &PlaybackMainWindow::addBackgroundPlaylistButton);
+
     // Grab the extant items
     QWidget *container = ui->backgroundPlaylistsCollection;
     QFrame *addPlaylistFrame = ui->AddPlaylistFrame;
@@ -176,4 +139,9 @@ void PlaybackMainWindow::newShowFileButton()
 void PlaybackMainWindow::settingsShowFileButton()
 {
     qDebug("Button Press: Settings Show File");
+}
+
+void PlaybackMainWindow::addBackgroundPlaylistButton()
+{
+    qDebug("Button Press: Add Background Music Playlist");
 }
