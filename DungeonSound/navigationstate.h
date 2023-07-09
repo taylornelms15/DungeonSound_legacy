@@ -23,10 +23,11 @@ public:
         return instance;
     }
 
-    void loadShowFile(const QString path);
+    int loadShowFile(const QString path);
 #ifdef USING_SAMPLE_SHOWFILE
-    void loadSampleShowFile();
+    int loadSampleShowFile();
 #endif
+    void loadNewShowFile();
 
     ShowFile *showfile;
 

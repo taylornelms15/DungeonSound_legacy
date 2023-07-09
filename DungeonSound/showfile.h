@@ -36,6 +36,7 @@ public:
                    qUtf8Printable(filepath), retval);
         }
     }
+    int loadFile(const QString loadPath);
 
     void appendBackgroundPlaylist(Playlist& pl){
         bg_playlists.push_back(pl);
@@ -74,7 +75,6 @@ protected:
 
     static inline const QString bg_playlists_element_name = QString("BackgroundPlaylists");
 
-    int loadFile(const QString loadPath);
     int loadFromFile(QXmlStreamReader& reader);
     int loadBackgroundPlaylists(QXmlStreamReader& reader);
     void saveToFile(QXmlStreamWriter& writer);

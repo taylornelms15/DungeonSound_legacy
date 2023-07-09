@@ -4,17 +4,23 @@ NavigationState::NavigationState() :
     showfile(nullptr)
 {}
 
-void NavigationState::loadShowFile(const QString path)
+void NavigationState::loadNewShowFile()
+{
+    showfile = new ShowFile();
+}
+
+int NavigationState::loadShowFile(const QString path)
 {
     if (showfile) {
         delete showfile;
     }
-    showfile = new ShowFile(path);
+    showfile = new ShowFile();
+    return showfile->loadFile(path);
 }
 
 #ifdef USING_SAMPLE_SHOWFILE
-void NavigationState::loadSampleShowFile()
+int NavigationState::loadSampleShowFile()
 {
-    loadShowFile(QString(sample_saveloc));
+    return loadShowFile(QString(sample_saveloc));
 }
 #endif

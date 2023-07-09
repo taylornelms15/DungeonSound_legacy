@@ -11,11 +11,6 @@ ShowFile::ShowFile() :
 
 }
 
-int loadFile(const QString loadPath)
-{
-    return -EIO;
-}
-
 void ShowFile::saveToFile(QXmlStreamWriter& writer)
 {
     // write header

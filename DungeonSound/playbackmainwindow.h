@@ -26,10 +26,18 @@ public slots:
     void addBackgroundPlaylistButton();
 
 protected:
+    // Widget manipulation
     int setupIconBar();
     int setupBackgroundPlaylistsWidget();
     int updateBackgroundPlaylistsWidget();
     void clearBackgroundPlaylistsWidget();
+
+    int updateWidgets();
+
+    // File operations
+    int executeSaveShowFile();
+    int executeLoadShowFile();
+    int executeNewShowFile();
 
     NavigationState& navstate;
 

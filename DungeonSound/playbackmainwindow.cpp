@@ -2,6 +2,7 @@
 #include "./ui_playbackmainwindow.h"
 
 #include <QFile>
+#include <QFileDialog>
 #include <QtAlgorithms>
 
 #include "flowlayout/flowlayout.h"
@@ -105,6 +106,16 @@ int PlaybackMainWindow::setupBackgroundPlaylistsWidget()
     return updateBackgroundPlaylistsWidget();
 }
 
+int PlaybackMainWindow::updateWidgets()
+{
+   int rv;
+   rv = updateBackgroundPlaylistsWidget();
+   if (rv)
+       return rv;
+
+   return rv;
+}
+
 /* Constructor/Destructor */
 
 PlaybackMainWindow::PlaybackMainWindow(QWidget *parent)
@@ -117,6 +128,8 @@ PlaybackMainWindow::PlaybackMainWindow(QWidget *parent)
 
 #ifdef USING_SAMPLE_SHOWFILE
     navstate.loadSampleShowFile();
+#else
+    navstate.loadNewShowFile();
 #endif
     setupBackgroundPlaylistsWidget();
 
@@ -127,24 +140,102 @@ PlaybackMainWindow::~PlaybackMainWindow()
     delete ui;
 }
 
+/* File Operations */
+
+int PlaybackMainWindow::executeSaveShowFile()
+{
+    if (navstate.showfile) {
+        if (!navstate.showfile->getFilePath().length()) {
+            // if no save filepath, get one
+            QString savepath = QFileDialog::getSaveFileName(
+                        this,
+                        "Save File",
+                        QString(),
+                        "ShowFiles (*.showfile)");
+            if (savepath.length()){
+                qDebug() << "<Saving> Save path chosen <" << savepath << ">, saving.";
+                return navstate.showfile->saveShowFile(savepath);
+            }
+            else{
+                qDebug() << "<Saving> Save path not chosen <" << savepath << ">, not saving.";
+                return 0;
+            }
+        }
+        else {
+            qDebug() << "<Saving> Save path kept as <" << navstate.showfile->getFilePath() << ">, saving.";
+            return navstate.showfile->saveShowFile();
+        }
+    }
+    else {
+        qWarning() << "No showfile under NavState object, not saving";
+        return -EINVAL;
+    }
+}
+
+int PlaybackMainWindow::executeNewShowFile()
+{
+    // TODO: "Would you like to save?"
+    qDebug() << "<Loading> Loading new show file";
+    navstate.loadNewShowFile();
+    updateWidgets();
+    return 0;
+}
+
+int PlaybackMainWindow::executeLoadShowFile()
+{
+    int rv = 0;
+    QString default_dir("");
+    if (navstate.showfile && navstate.showfile->getFilePath().length()) {
+        QFileInfo finfo(navstate.showfile->getFilePath());
+        if (finfo.exists()) {
+            default_dir = finfo.dir().canonicalPath();
+        }
+    }
+    // TODO: "Would you like to save?"
+    QString loadpath = QFileDialog::getOpenFileName(
+                this,
+                "Open File",
+                default_dir,
+                "ShowFiles (*.showfile)");
+    if (loadpath.length()) {
+        qDebug() << "<Loading> Load path chosen <" << loadpath << ">, loading.";
+        rv = navstate.loadShowFile(loadpath);
+        if (rv)
+            return rv;
+    }
+    else {
+        qDebug() << "<Loading> Load path not chosen <" << loadpath << ">, not loading.";
+        return 0;
+    }
+    updateWidgets();
+    return 0;
+}
+
 /* Button Press Callbacks */
 
 void PlaybackMainWindow::saveShowFileButton()
 {
     qDebug("Button Press: Save Show File");
-    if (navstate.showfile) {
-        navstate.showfile->saveShowFile();
-    }
+    int rv = executeSaveShowFile();
+    if (rv)
+        qWarning() << "<Saving> Error on save: " << rv;
 }
 
 void PlaybackMainWindow::openShowFileButton()
 {
     qDebug("Button Press: Open Show File");
+    int rv = executeLoadShowFile();
+    if (rv)
+        qWarning() << "<Loading> Error on load: " << rv;
 }
 
 void PlaybackMainWindow::newShowFileButton()
 {
     qDebug("Button Press: New Show File");
+    int rv = executeNewShowFile();
+    if (rv)
+        qWarning() << "<Loading> Error on new: " << rv;
+
 }
 
 void PlaybackMainWindow::settingsShowFileButton()
