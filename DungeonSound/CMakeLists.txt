@@ -102,6 +102,8 @@ set(PROJECT_SOURCES
         development_headers.h
         navigationstate.h
         navigationstate.cpp
+        playlistbox.h
+        playlistbox.cpp
 )
 
 qt_add_library(DungeonSoundLib

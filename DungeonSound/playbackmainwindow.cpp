@@ -4,6 +4,7 @@
 #include <QFile>
 
 #include "flowlayout/flowlayout.h"
+#include "playlistbox.h"
 #include "navigationstate.h"
 
 /* Playlist Button */
@@ -107,7 +108,7 @@ int PlaybackMainWindow::updateBackgroundPlaylistsWidget()
         return 0;
     }
     for (int i = 0; i < sf->getNumBackgroundPlaylists(); ++i) {
-        QFrame *pl_box = createPlaylistBox(sf->getBackgroundPlaylist(i), container);
+        PlaylistBox *pl_box = new PlaylistBox(container, sf->getBackgroundPlaylist(i));
         container->layout()->addWidget(pl_box);
     }
     container->layout()->addItem(addLayoutItem);
@@ -123,9 +124,8 @@ int PlaybackMainWindow::setupBackgroundPlaylistsWidget()
     QLayoutItem *addLayoutItem = container->layout()->takeAt(container->layout()->indexOf(addPlaylistFrame));
 
     // Change the layout to the flow layout
-    FlowLayout *flayout = new FlowLayout(container);
     delete container->layout();
-    container->setLayout(flayout);
+    FlowLayout *flayout = new FlowLayout(container);
     flayout->addItem(addLayoutItem);
 
     return updateBackgroundPlaylistsWidget();
@@ -158,6 +158,9 @@ PlaybackMainWindow::~PlaybackMainWindow()
 void PlaybackMainWindow::saveShowFileButton()
 {
     qDebug("Button Press: Save Show File");
+    if (navstate.showfile) {
+        navstate.showfile->saveShowFile();
+    }
 }
 
 void PlaybackMainWindow::openShowFileButton()
