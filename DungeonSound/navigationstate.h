@@ -23,10 +23,25 @@ public:
         return instance;
     }
 
+    /**
+     * @brief loadShowFile Loads the ShowFile at the given path
+     * @param path Filepath to load
+     * @return 0 on success, negative value on error
+     */
     int loadShowFile(const QString path);
 #ifdef USING_SAMPLE_SHOWFILE
+    /**
+     * @brief loadSampleShowFile Loads the sample showfile
+     * @return 0 on success, negative value on error
+     */
     int loadSampleShowFile();
 #endif
+    /**
+     * @brief loadNewShowFile Loads a "new" showfile
+     *
+     * Mostly, this clears the internal ShowFile and
+     * instantiates a new one.
+     */
     void loadNewShowFile();
 
     ShowFile *showfile;
