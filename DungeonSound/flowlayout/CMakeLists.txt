@@ -21,26 +21,3 @@ target_link_libraries(flowlayout_lib PUBLIC
     Qt::Gui
     Qt::Widgets
 )
-
-qt_add_executable(flowlayout
-    main.cpp
-    window.cpp window.h
-)
-
-set_target_properties(flowlayout PROPERTIES
-    WIN32_EXECUTABLE TRUE
-    MACOSX_BUNDLE TRUE
-)
-
-target_link_libraries(flowlayout PUBLIC
-    flowlayout_lib
-    Qt::Core
-    Qt::Gui
-    Qt::Widgets
-)
-
-install(TARGETS flowlayout
-    RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
-    BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
-    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
-)

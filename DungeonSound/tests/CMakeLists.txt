@@ -42,6 +42,7 @@ target_link_libraries(test_saving
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
     GTest::gtest_main
     DungeonSoundLib
+    flowlayout_lib
 )
 add_test(test_saving
     ${TEST_LIST}
