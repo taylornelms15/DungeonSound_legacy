@@ -33,7 +33,7 @@ public:
     }
 
     /* Accessors */
-    inline int getNumSoundSamples(){
+    inline int getNumSoundSamples() const{
         return sampleList.length();
     }
 

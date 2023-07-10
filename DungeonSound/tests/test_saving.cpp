@@ -99,6 +99,17 @@ TEST(TestSavingSoundSample, BasicAssertions) {
     ASSERT_EQ(ss, ss_check);
 }
 
+void assertPlaylistsEqual(const Playlist *pl1, const Playlist *pl2)
+{
+    ASSERT_EQ(pl1->volume_factor, pl2->volume_factor);
+    ASSERT_EQ(pl1->getNumSoundSamples(), pl2->getNumSoundSamples());
+    ASSERT_QSTREQ(pl1->name, pl2->name);
+
+    for(int i = 0; i < pl1->getNumSoundSamples(); ++i) {
+        ASSERT_EQ(*pl1->getSoundSample(i), *pl2->getSoundSample(i));
+    }
+}
+
 TEST(TestSavingPlaylist, BasicAssertions) {
     // Create structures, prep output
     QBuffer outbuf;
@@ -134,11 +145,8 @@ TEST(TestSavingPlaylist, BasicAssertions) {
     ASSERT_TRUE(reader.isEndDocument());
 
     // Check data
-    ASSERT_QSTREQ(pl_title, pl_check.name);
-    ASSERT_EQ(pl.volume_factor, pl_check.volume_factor);
-    for (int i = 0; i < 2; ++i) {
-        ASSERT_EQ(ss[i], *pl_check.getSoundSample(i));
-    }
+    SCOPED_TRACE("TestSavingPlaylist");
+    assertPlaylistsEqual(&pl, &pl_check);
 }
 
 static void DebugContents(QString fname)
@@ -152,6 +160,16 @@ static void DebugContents(QString fname)
     }
     of.close();
 
+}
+
+void assertShowFilesEqual(const ShowFile *sf1, const ShowFile *sf2)
+{
+    ASSERT_EQ(sf1->getFilePath(), sf2->getFilePath());
+    ASSERT_EQ(sf1->getNumBackgroundPlaylists(), sf2->getNumBackgroundPlaylists());
+    for(int i = 0; i < sf1->getNumBackgroundPlaylists(); ++i) {
+        SCOPED_TRACE(__func__ + std::to_string(i));
+        assertPlaylistsEqual(sf1->getBackgroundPlaylist(i), sf2->getBackgroundPlaylist(i));
+    }
 }
 
 TEST(TestSavingShowfile, BasicAssertions) {
@@ -188,8 +206,12 @@ TEST(TestSavingShowfile, BasicAssertions) {
 #endif
     sf.saveShowFile(tempfile);
 
+    // Load data, compare
     ShowFile sf2(tempfile);
-    // TODO: compare the two ShowFiles
-    // TODO: delete tempfile
+    SCOPED_TRACE("TestSavingShowfile");
+    assertShowFilesEqual(&sf, &sf2);
+
+    // Delete temp file
+    ASSERT_TRUE(QFile::remove(tempfile));
 
 }

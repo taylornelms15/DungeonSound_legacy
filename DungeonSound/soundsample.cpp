@@ -32,8 +32,10 @@ void SoundSample::setResourceURL(QString url)
     ID3v2_Tag *tag = ID3v2_read_tag(url.toStdString().c_str());
     if (tag == NULL)
         qCritical() << "Error reading tag from string <" << url << ">";
+#if 0
     else
         qDebug() << "Read tag! Elapsed: " << timer.elapsed() << "ms";
+#endif
 
 #ifdef HAVE_FFMPEG
     AVFormatContext* pFormatCtx = avformat_alloc_context();

@@ -43,7 +43,7 @@ public:
     }
 
     /* Accessors */
-    inline int getNumBackgroundPlaylists(){
+    inline int getNumBackgroundPlaylists() const{
         return bg_playlists.length();
     }
 
