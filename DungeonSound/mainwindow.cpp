@@ -47,6 +47,7 @@ int MainWindow::setupIconBar()
     connect(ui->actionOpenShowFile, &QAction::triggered, this, &MainWindow::openShowFileButton);
     connect(ui->actionSaveShowFile, &QAction::triggered, this, &MainWindow::saveShowFileButton);
     connect(ui->actionSettingsShowFile, &QAction::triggered, this, &MainWindow::settingsShowFileButton);
+    connect(ui->actionBackShowFile, &QAction::triggered, this, &MainWindow::backButton);
 
     return 0;
 }
@@ -65,7 +66,7 @@ void MainWindow::loadPlaybackMainWindow()
     QObject::connect(pbmw, &PlaybackMainWindow::needUpdateWidgets,
                      this, &MainWindow::updateWidgets);
 
-    switcher->addWidget(pbmw);
+    switcher->insertWidget(WindowId::PLAYBACK, pbmw);
 }
 
 void MainWindow::loadPlaylistEditWindow()
@@ -78,7 +79,7 @@ void MainWindow::loadPlaylistEditWindow()
     }
     plew = new PlaylistEditWindow(loader.load(&f));
     f.close();
-    switcher->addWidget(plew);
+    switcher->insertWidget(WindowId::PLAYLIST, plew);
 }
 
 void MainWindow::setupWindowSwitcher()
@@ -88,7 +89,6 @@ void MainWindow::setupWindowSwitcher()
     while (switcher->count()) {
         QWidget *current = switcher->currentWidget();
         switcher->removeWidget(current);
-        qDebug("Deleting widget %p", current);
         delete current;
     }
 }
@@ -98,6 +98,33 @@ int MainWindow::updateWidgets()
     qDebug() << "<UI> " << __PRETTY_FUNCTION__;
     int rv = 0;
 
+    /* Update toolbar */
+    switch(navstate.currentWindowId){
+    case WindowId::PLAYBACK:
+        if (ui->actionBackShowFile->isEnabled()) {
+            ui->actionBackShowFile->setEnabled(false);
+        }
+        break;
+    case WindowId::PLAYLIST:
+        if (!ui->actionBackShowFile->isEnabled()) {
+            ui->actionBackShowFile->setEnabled(true);
+        }
+        break;
+    default:
+        qWarning() << "Unknown window id " << navstate.currentWindowId;
+        return -EINVAL;
+    }
+
+    if (navstate.currentWindowId == WindowId::PLAYBACK) {
+
+    }
+
+    /* Update switcher focus */
+    if (switcher->currentIndex() != navstate.currentWindowId) {
+        switcher->setCurrentIndex(navstate.currentWindowId);
+    }
+
+    /* Update child windows */
     if (pbmw) {
         rv = pbmw->updateWidgets();
         if (rv)
@@ -117,6 +144,9 @@ MainWindow::MainWindow(QWidget *parent) :
     , ui(new Ui::MainWindow)
     , navstate(NavigationState::getInstance())
 {
+    QObject::connect(this, &MainWindow::needUpdateWidgets,
+                     this, &MainWindow::updateWidgets);
+
     ui->setupUi(this);
 
     /* Set up icons */
@@ -179,7 +209,7 @@ int MainWindow::executeNewShowFile()
     // TODO: "Would you like to save?"
     qDebug() << "<Loading> Loading new show file";
     navstate.loadNewShowFile();
-    updateWidgets();
+    emit needUpdateWidgets();
     return 0;
 }
 
@@ -209,8 +239,18 @@ int MainWindow::executeLoadShowFile()
         qDebug() << "<Loading> Load path not chosen <" << loadpath << ">, not loading.";
         return 0;
     }
-    updateWidgets();
+    emit needUpdateWidgets();
     return 0;
+}
+
+/* Navigation */
+int MainWindow::executeBackButton()
+{
+    int rv = navstate.executeBack();
+    if (rv)
+        return rv;
+    emit needUpdateWidgets();
+    return rv;
 }
 
 /* Button Press Callbacks */
@@ -242,4 +282,12 @@ void MainWindow::newShowFileButton()
 void MainWindow::settingsShowFileButton()
 {
     qDebug("<Button Press> Settings Show File");
+}
+
+void MainWindow::backButton()
+{
+    qDebug("<Button Press> Back");
+    int rv = executeBackButton();
+    if (rv)
+        qWarning() << "<Navigation> Error on back: " << rv;
 }

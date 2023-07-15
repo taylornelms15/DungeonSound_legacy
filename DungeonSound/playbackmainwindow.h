@@ -35,6 +35,8 @@ protected:
     int updateBackgroundPlaylistsWidget();
     void clearBackgroundPlaylistsWidget();
 
+    int executeAddBackgroundPlaylist();
+
     NavigationState& navstate;
 
 

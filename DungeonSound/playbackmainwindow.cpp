@@ -96,10 +96,21 @@ PlaybackMainWindow::~PlaybackMainWindow()
     delete ui;
 }
 
+/* Operations */
+
+int PlaybackMainWindow::executeAddBackgroundPlaylist()
+{
+    navstate.currentWindowId = WindowId::PLAYLIST;
+    emit needUpdateWidgets();
+    return 0;
+}
+
 /* Button Press Callbacks */
 
 void PlaybackMainWindow::addBackgroundPlaylistButton()
 {
     qDebug("<Button Press> Add Background Music Playlist");
-    emit needUpdateWidgets();
+    int rv = executeAddBackgroundPlaylist();
+    if (rv)
+       qWarning() << "Error on Add Background Playlist: " << rv;
 }

@@ -5,6 +5,15 @@
 #include "showfile.h"
 
 /**
+ * @brief The WindowId enum - Indexes of main window StackedWidget contents
+ */
+enum WindowId {
+    PLAYBACK = 0,
+    PLAYLIST,
+    count
+};
+
+/**
  * @brief Keeps track of how a loaded ShowFile is active without UI dependencies
  *
  * This is a non-savable record of things like "which showfile is loaded, what's being played back" etc.
@@ -22,6 +31,8 @@ public:
         static NavigationState instance;
         return instance;
     }
+
+    /* Showfile */
 
     /**
      * @brief loadShowFile Loads the ShowFile at the given path
@@ -44,7 +55,13 @@ public:
      */
     void loadNewShowFile();
 
+    /* Navigation */
+    int executeBack();
+
+    /* Members */
+
     ShowFile *showfile;
+    WindowId currentWindowId;
 
 // singleton magic
     NavigationState(NavigationState const&) = delete;

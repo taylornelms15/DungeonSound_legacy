@@ -27,11 +27,15 @@ public slots:
     void openShowFileButton();
     void newShowFileButton();
     void settingsShowFileButton();
+    void backButton();
     /**
      * @brief updateWidgets - Updates visual elements to match NavState
      * @return 0 on success, negative value otherwise
      */
     int updateWidgets();
+
+signals:
+    void needUpdateWidgets();
 
 protected:
     // Widget manipulation
@@ -39,6 +43,9 @@ protected:
     void loadPlaybackMainWindow();
     void loadPlaylistEditWindow();
     int setupIconBar();
+
+    // Navigation
+    int executeBackButton();
 
     // File operations
     int executeSaveShowFile();
