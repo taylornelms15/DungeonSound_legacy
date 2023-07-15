@@ -16,54 +16,25 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
 # flowlayout subdir
 add_subdirectory(flowlayout)
 
-#[[
 # ffmpeg
-set(FFMPEG_ROOT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../ffmpeg-6.0)
-if (NOT EXISTS ${FFMPEG_ROOT_DIRECTORY} OR NOT IS_DIRECTORY ${FFMPEG_ROOT_DIRECTORY})
-    message(FATAL_ERROR "Could not find ${FFMPEG_ROOT_DIRECTORY}")
-endif()
+#set(FFMPEG_DIR_rel ${CMAKE_CURRENT_SOURCE_DIR}/../../ffmpeg-install)
+#cmake_path(SET FFMPEG_DIR NORMALIZE ${FFMPEG_DIR_rel})
+#if (NOT EXISTS ${FFMPEG_DIR} OR NOT IS_DIRECTORY ${FFMPEG_DIR})
+#    message(FATAL_ERROR "Could not find ${FFMPEG_DIR}")
+#endif()
 
-find_path(AVFORMAT_INCLUDE_DIR REQUIRED
-    NAMES "avformat.h"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}
-    PATH_SUFFIXES "libavformat"
-)
-find_path(AVCODEC_INCLUDE_DIR REQUIRED
-    NAMES "avcodec.h"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}
-    PATH_SUFFIXES "libavcodec"
-)
-find_path(AVUTIL_INCLUDE_DIR REQUIRED
-    NAMES "avutil.h"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}/libavutil
-    PATH_SUFFIXES "libavutil"
-)
-find_path(AVDEVICE_INCLUDE_DIR REQUIRED
-    NAMES "avdevice.h"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}
-    PATH_SUFFIXES "libavdevice"
-)
-find_library(AVFORMAT_LIBRARY REQUIRED
-    NAMES "avformat"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}/libavformat
-    NO_DEFAULT_PATH
-)
-find_library(AVCODEC_LIBRARY REQUIRED
-    NAMES "avcodec"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}
-    PATH_SUFFIXES "libavcodec"
-)
-find_library(AVUTIL_LIBRARY REQUIRED
-    NAMES "avutil"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}
-    PATH_SUFFIXES "libavutil"
-)
-find_library(AVDEVICE_LIBRARY REQUIRED
-    NAMES "avdevice"
-    HINTS ${FFMPEG_ROOT_DIRECTORY}
-    PATH_SUFFIXES "libavdevice"
-)
-]]
+#set(ENV{PKG_CONFIG_PATH} ${FFMPEG_DIR}/lib/pkgconfig)
+#include(FindPkgConfig)
+#pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
+#    libavcodec
+#    libavdevice
+#    libavfilter
+#    libavformat
+#    libavutil
+#    libpostproc
+#    libswresample
+#    libswscale
+#)
 
 # id3v2lib
 
@@ -110,9 +81,11 @@ qt_add_library(DungeonSoundLib
     SHARED
     ${PROJECT_SOURCES}
 )
+
 target_link_libraries(DungeonSoundLib
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
+    #PkgConfig::FFMPEG
     id3v2lib
     flowlayout_lib
 )
@@ -150,9 +123,11 @@ include("C:/Users/taylo/AppData/Local/Android/Sdk/android_openssl/android_openss
 target_link_libraries(DungeonSound
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
+    #PkgConfig::FFMPEG
     DungeonSoundLib
     flowlayout_lib
 )
+message(WARNING "CC: ${CMAKE_C_COMPILER}")
 
 set_target_properties(DungeonSound PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
