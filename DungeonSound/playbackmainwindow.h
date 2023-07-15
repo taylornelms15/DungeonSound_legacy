@@ -1,7 +1,7 @@
 #ifndef PLAYBACKMAINWINDOW_H
 #define PLAYBACKMAINWINDOW_H
 
-#include <QMainWindow>
+#include <QFrame>
 #include <QStyle>
 
 #include "navigationstate.h"
@@ -10,7 +10,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class PlaybackMainWindow; }
 QT_END_NAMESPACE
 
-class PlaybackMainWindow : public QMainWindow
+class PlaybackMainWindow : public QFrame
 {
     Q_OBJECT
 
@@ -19,25 +19,21 @@ public:
     ~PlaybackMainWindow();
 
 public slots:
-    void saveShowFileButton();
-    void openShowFileButton();
-    void newShowFileButton();
-    void settingsShowFileButton();
     void addBackgroundPlaylistButton();
+    /**
+     * @brief updateWidgets - Updates visual elements to match NavState
+     * @return 0 on success, negative value otherwise
+     */
+    int updateWidgets();
+
+signals:
+    void needUpdateWidgets();
 
 protected:
     // Widget manipulation
-    int setupIconBar();
     int setupBackgroundPlaylistsWidget();
     int updateBackgroundPlaylistsWidget();
     void clearBackgroundPlaylistsWidget();
-
-    int updateWidgets();
-
-    // File operations
-    int executeSaveShowFile();
-    int executeLoadShowFile();
-    int executeNewShowFile();
 
     NavigationState& navstate;
 
@@ -45,7 +41,5 @@ protected:
 private:
     Ui::PlaybackMainWindow *ui;
 
-    void setActionIconStyle(QAction *action, QStyle::StandardPixmap stylepixmap);
-    void setActionIconStyle(QAction *action, QString iconstring);
 };
 #endif // PLAYBACKMAINWINDOW_H

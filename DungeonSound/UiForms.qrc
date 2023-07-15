@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/DungeonSound/UiForms">
+        <file>mainwindow.ui</file>
+        <file>playbackmainwindow.ui</file>
+        <file>playlisteditwindow.ui</file>
+    </qresource>
+</RCC>

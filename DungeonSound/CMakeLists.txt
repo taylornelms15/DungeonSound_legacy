@@ -10,8 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # qt
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia UiTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia UiTools)
 
 # flowlayout subdir
 add_subdirectory(flowlayout)
@@ -59,10 +59,17 @@ add_subdirectory(tests)
 # project library
 
 set(PROJECT_SOURCES
+        mainwindow.cpp
+        mainwindow.h
+        mainwindow.ui
         playbackmainwindow.cpp
         playbackmainwindow.h
         playbackmainwindow.ui
+        playlisteditwindow.cpp
+        playlisteditwindow.h
+        playlisteditwindow.ui
         nonstandard_icons.qrc
+        UiForms.qrc
         soundsample.h
         soundsample.cpp
         playlist.h
@@ -85,6 +92,7 @@ qt_add_library(DungeonSoundLib
 target_link_libraries(DungeonSoundLib
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
+    PRIVATE Qt${QT_VERSION_MAJOR}::UiTools
     #PkgConfig::FFMPEG
     id3v2lib
     flowlayout_lib
@@ -123,6 +131,7 @@ include("C:/Users/taylo/AppData/Local/Android/Sdk/android_openssl/android_openss
 target_link_libraries(DungeonSound
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia
+    PRIVATE Qt${QT_VERSION_MAJOR}::UiTools
     #PkgConfig::FFMPEG
     DungeonSoundLib
     flowlayout_lib
