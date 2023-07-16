@@ -14,8 +14,10 @@
  */
 class PlaylistBox : public QFrame
 {
+    Q_OBJECT
+
 public:
-    PlaylistBox(QWidget *parent, const Playlist *pl);
+    PlaylistBox(const Playlist *pl, QWidget *parent);
 
     const Playlist *playlist;
     QPushButton *editButton;
@@ -32,6 +34,9 @@ public slots:
     void playButtonPressed();
     void pauseButtonPressed();
     void stopButtonPressed();
+
+signals:
+    void signalEditPlaylistPressed(const Playlist *pl);
 };
 
 

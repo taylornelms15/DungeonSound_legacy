@@ -77,8 +77,12 @@ void MainWindow::loadPlaylistEditWindow()
         qCritical() << "Could not find file <" << MainWindow::plew_path << ">: " << f.errorString();
         exit(1);
     }
-    plew = new PlaylistEditWindow(loader.load(&f));
+    plew = new PlaylistEditWindow(nullptr, loader.load(&f));
     f.close();
+
+    QObject::connect(plew, &PlaylistEditWindow::needUpdateWidgets,
+                     this, &MainWindow::updateWidgets);
+
     switcher->insertWidget(WindowId::PLAYLIST, plew);
 }
 
@@ -130,8 +134,10 @@ int MainWindow::updateWidgets()
         if (rv)
             return rv;
     }
-    if (plew) {
-        //TODO: plew updateWidgets()
+    if (plew && navstate.isShowingEditPlaylistWindow()) {
+        rv = plew->updateWidgets();
+        if (rv)
+            return rv;
     }
 
     return rv;

@@ -3,7 +3,9 @@
 #include <errno.h>
 #include <QDebug>
 
-Playlist::Playlist()
+Playlist::Playlist() :
+    name(QString("New Playlist"))
+    , volume_factor(1.0)
 {
 
 }

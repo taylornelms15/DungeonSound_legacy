@@ -26,6 +26,8 @@ public slots:
      */
     int updateWidgets();
 
+    void catchEditPlaylistPressed(const Playlist *pl);
+
 signals:
     void needUpdateWidgets();
 

@@ -133,3 +133,16 @@ int ShowFile::loadFile(const QString loadPath)
     filepath = loadPath;
     return rv;
 }
+
+int ShowFile::renameBackgroundPlaylist(const Playlist *pl, QString& newName)
+{
+    ssize_t pl_idx = indexOfBackgroundPlaylist(pl);
+    if (pl_idx < 0){
+        qWarning("Could not find background playlist at %p", pl);
+        return -EINVAL;
+    }
+
+    bg_playlists[pl_idx].name = newName;
+
+    return 0;
+}

@@ -42,6 +42,8 @@ public:
         bg_playlists.push_back(pl);
     }
 
+    int renameBackgroundPlaylist(const Playlist *pl, QString& newName);
+
     /* Accessors */
     inline int getNumBackgroundPlaylists() const{
         return bg_playlists.length();
@@ -51,6 +53,20 @@ public:
         if (index < 0 || index > bg_playlists.length())
             return nullptr;
         return &bg_playlists[index];
+    }
+
+    /**
+     * @brief Find the index of the given playlist, in the worst possible way (pointer math)
+     * @param pl address of playlist to find
+     * @return index of playlist
+     */
+    ssize_t indexOfBackgroundPlaylist(const Playlist *pl) const {
+        const Playlist *pl_0 = bg_playlists.constData();
+        long diff = pl - pl_0;
+
+        if (diff < 0)
+            return -1;
+        return diff;
     }
 
     inline QString getFilePath() const {

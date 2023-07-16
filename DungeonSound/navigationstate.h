@@ -57,11 +57,27 @@ public:
 
     /* Navigation */
     int executeBack();
+    int executeEditBackgroundPlaylist(size_t idx);
+    int executeEditBackgroundPlaylist(const Playlist *pl){
+        ssize_t idx = showfile->indexOfBackgroundPlaylist(pl);
+        if (idx < 0) {
+            qWarning("<Navigation> Could not find playlist at %p", pl);
+            return -EINVAL;
+        }
+        return executeEditBackgroundPlaylist(idx);
+    }
+    inline bool isShowingEditPlaylistWindow() const{
+        return currentBackgroundPlaylistId != -1;
+    }
 
     /* Members */
 
     ShowFile *showfile;
     WindowId currentWindowId;
+    /**
+     * @brief index of the background playlist we're looking at, or -1 for none
+     */
+    ssize_t currentBackgroundPlaylistId;
 
 // singleton magic
     NavigationState(NavigationState const&) = delete;

@@ -18,7 +18,7 @@ void PlaylistBox::setPlaybackButtonProperties(QPushButton *button, QStyle::Stand
     button->setIcon(this->style()->standardIcon(pm));
 }
 
-PlaylistBox::PlaylistBox(QWidget *parent, const Playlist *pl)
+PlaylistBox::PlaylistBox(const Playlist *pl, QWidget *parent)
     : QFrame(parent)
     , playlist(pl)
     , editButton(new QPushButton(this))
@@ -75,6 +75,7 @@ PlaylistBox::PlaylistBox(QWidget *parent, const Playlist *pl)
 void PlaylistBox::editButtonPressed()
 {
     qDebug() << "<Button Press> edit button for playlist " << playlist->name;
+    emit signalEditPlaylistPressed(playlist);
 }
 
 void PlaylistBox::playButtonPressed()

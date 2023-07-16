@@ -14,7 +14,13 @@ void PlaybackMainWindow::clearBackgroundPlaylistsWidget()
 {
     QWidget *container = ui->backgroundPlaylistsCollection;
     container->setUpdatesEnabled(false);
-    qDeleteAll(container->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
+    QLayout* layout = container->layout();
+    for(int i = layout->count() - 1; i >= 0; --i) {
+        QLayoutItem* item = layout->takeAt(i);
+        delete item->widget();
+        delete item;
+    }
+    //qDeleteAll(container->findChildren<QWidget*>("", Qt::FindDirectChildrenOnly));
     container->setUpdatesEnabled(true);
 }
 
@@ -36,7 +42,14 @@ int PlaybackMainWindow::updateBackgroundPlaylistsWidget()
         return 0;
     }
     for (int i = 0; i < sf->getNumBackgroundPlaylists(); ++i) {
-        PlaylistBox *pl_box = new PlaylistBox(container, sf->getBackgroundPlaylist(i));
+        const Playlist *pl = sf->getBackgroundPlaylist(i);
+        if (!pl){
+            qWarning("No valid playlist found for index %d", i);
+            return -EINVAL;
+        }
+        PlaylistBox *pl_box = new PlaylistBox(pl, container);
+        QObject::connect(pl_box, &PlaylistBox::signalEditPlaylistPressed,
+                         this, &PlaybackMainWindow::catchEditPlaylistPressed);
         container->layout()->addWidget(pl_box);
     }
     container->layout()->addItem(addLayoutItem);
@@ -101,6 +114,7 @@ PlaybackMainWindow::~PlaybackMainWindow()
 int PlaybackMainWindow::executeAddBackgroundPlaylist()
 {
     navstate.currentWindowId = WindowId::PLAYLIST;
+    navstate.executeEditBackgroundPlaylist(navstate.showfile->getNumBackgroundPlaylists());
     emit needUpdateWidgets();
     return 0;
 }
@@ -113,4 +127,14 @@ void PlaybackMainWindow::addBackgroundPlaylistButton()
     int rv = executeAddBackgroundPlaylist();
     if (rv)
        qWarning() << "Error on Add Background Playlist: " << rv;
+}
+
+void PlaybackMainWindow::catchEditPlaylistPressed(const Playlist *pl)
+{
+    int rv = navstate.executeEditBackgroundPlaylist(pl);
+    if (rv) {
+       qWarning() << "Error on Edit Background Playlist: " << rv;
+       return;
+    }
+    emit needUpdateWidgets();
 }

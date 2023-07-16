@@ -3,6 +3,7 @@
 NavigationState::NavigationState() :
     showfile(nullptr)
     , currentWindowId(WindowId::PLAYBACK)
+    , currentBackgroundPlaylistId(-1)
 {}
 
 void NavigationState::loadNewShowFile()
@@ -28,6 +29,22 @@ int NavigationState::loadSampleShowFile()
 }
 #endif
 
+int NavigationState::executeEditBackgroundPlaylist(size_t idx)
+{
+    currentWindowId = WindowId::PLAYLIST;
+    if (idx == showfile->getNumBackgroundPlaylists()){
+        // create a new playlist at the end
+        Playlist pl = Playlist();
+        showfile->appendBackgroundPlaylist(pl);
+    }
+    if (idx > showfile->getNumBackgroundPlaylists()){
+        qWarning() << "Invalid playlist index provided: " << idx << ">" << showfile->getNumBackgroundPlaylists();
+        return -EINVAL;
+    }
+    currentBackgroundPlaylistId = idx;
+    return 0;
+}
+
 int NavigationState::executeBack()
 {
     switch(currentWindowId) {
@@ -36,6 +53,7 @@ int NavigationState::executeBack()
         return -EINVAL;
     case WindowId::PLAYLIST:
         qDebug() << "<Navigation> Registered 'Back' while on PLAYLIST window, returning to PLAYBACK";
+        currentBackgroundPlaylistId = -1;
         currentWindowId = WindowId::PLAYBACK;
         break;
     default:
