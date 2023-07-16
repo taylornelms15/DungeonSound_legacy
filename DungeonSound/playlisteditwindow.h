@@ -15,6 +15,12 @@ public:
     explicit PlaylistEditWindow(QWidget *parent = nullptr);
     ~PlaylistEditWindow();
 
+protected:
+    // Widget manipulation
+    int setupSoundSampleWidget;
+    int updateSoundSampleWidget;
+    void clearSoundSampleWidget();
+
 private:
     Ui::PlaylistEditWindow *ui;
 };

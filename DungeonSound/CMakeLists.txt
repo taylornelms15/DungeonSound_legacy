@@ -68,6 +68,9 @@ set(PROJECT_SOURCES
         playlisteditwindow.cpp
         playlisteditwindow.h
         playlisteditwindow.ui
+        soundsampleframe.cpp
+        soundsampleframe.h
+        soundsampleframe.ui
         nonstandard_icons.qrc
         UiForms.qrc
         soundsample.h
